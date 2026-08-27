@@ -7,8 +7,19 @@ import { ProductDetailsPage } from '../../pages/ProductDetailsPage';
 import { products } from '../../data/products';
 
 test.describe('Product Module', () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page, inventoryPage}) => {
     await page.goto('/inventory.html');
+    await inventoryPage
+      .verifyInventoryPage();
+    console.log(
+      'Current URL:',
+      page.url()
+    );
+  
+    console.log(
+      'Cookies:',
+      await page.context().cookies()
+    );
   });
 
   test(

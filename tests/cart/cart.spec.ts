@@ -6,8 +6,10 @@ import {
 import { products } from '../../data/products';
 
 test.describe('Cart Module', () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page,inventoryPage }) => {
     await page.goto('/inventory.html');
+    await inventoryPage
+      .verifyInventoryPage();
   });
 
   test(

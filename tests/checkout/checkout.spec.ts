@@ -19,6 +19,8 @@ test.describe('Checkout Module', () => {
       inventoryPage,
     }) => {
       await page.goto('/inventory.html');
+      await inventoryPage
+      .verifyInventoryPage();
 
       await inventoryPage.addProductToCart(
         products.backpack.name
