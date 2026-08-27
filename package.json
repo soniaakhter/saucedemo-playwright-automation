@@ -5,7 +5,7 @@
   "scripts": {
     "test": "playwright test",
     "test:all": "playwright test",
-    "test:smoke": "playwright test --grep @smoke",
+    "test:smoke": "playwright test --grep @smoke --project=chromium",
     "test:regression": "playwright test --grep @regression",
     "test:negative": "playwright test --grep @negative",
     "test:auth": "playwright test --grep @auth",
