@@ -1,0 +1,69 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+  pull_request:
+    branches:
+      - main
+      - master
+
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run Playwright Tests
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Create Environment File
+        run: |
+          echo "BASE_URL=${{ secrets.BASE_URL }}" >> .env
+          echo "STANDARD_USERNAME=${{ secrets.STANDARD_USERNAME }}" >> .env
+          echo "STANDARD_PASSWORD=${{ secrets.STANDARD_PASSWORD }}" >> .env
+          echo "LOCKED_OUT_USERNAME=${{ secrets.LOCKED_OUT_USERNAME }}" >> .env
+          echo "PROBLEM_USERNAME=${{ secrets.PROBLEM_USERNAME }}" >> .env
+          echo "PERFORMANCE_GLITCH_USERNAME=${{ secrets.PERFORMANCE_GLITCH_USERNAME }}" >> .env
+          echo "ERROR_USERNAME=${{ secrets.ERROR_USERNAME }}" >> .env
+          echo "VISUAL_USERNAME=${{ secrets.VISUAL_USERNAME }}" >> .env
+          echo "INVALID_USERNAME=${{ secrets.INVALID_USERNAME }}" >> .env
+          echo "INVALID_PASSWORD=${{ secrets.INVALID_PASSWORD }}" >> .env
+
+      - name: Run Smoke Tests
+        run: npm run test:smoke
+
+      - name: Upload Playwright Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload Test Results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: test-results/
+          retention-days: 14
