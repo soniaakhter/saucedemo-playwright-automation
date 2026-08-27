@@ -1,7 +1,7 @@
 
 # Playwright
 .env
-auth/
+/auth/
 node_modules/
 playwright-report/
 test-results/
